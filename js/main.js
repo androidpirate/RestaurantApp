@@ -1,8 +1,10 @@
+/* jshint esversion: 6 */
+
 let restaurants,
   neighborhoods,
-  cuisines
-var newMap
-var markers = []
+  cuisines;
+var newMap;
+var markers = [];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -11,6 +13,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added
   fetchNeighborhoods();
   fetchCuisines();
+  updaterestaurants();
 });
 
 /**
@@ -25,7 +28,7 @@ fetchNeighborhoods = () => {
       fillNeighborhoodsHTML();
     }
   });
-}
+};
 
 /**
  * Set neighborhoods HTML.
@@ -34,11 +37,14 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
+    if(localStorage.getItem("neighboorhood") === neighboorhood) {
+      option.setAttribute("selected", "selected");
+    }
     option.innerHTML = neighborhood;
     option.value = neighborhood;
     select.append(option);
   });
-}
+};
 
 /**
  * Fetch all cuisines and set their HTML.
@@ -52,7 +58,7 @@ fetchCuisines = () => {
       fillCuisinesHTML();
     }
   });
-}
+};
 
 /**
  * Set cuisines HTML.
@@ -62,11 +68,15 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
+    if(localStorage.getItem("cuisine") === cuisine) {
+      option.setAttribute("selected", "selected");
+      localStorage.clear();
+    }
     option.innerHTML = cuisine;
     option.value = cuisine;
     select.append(option);
   });
-}
+};
 
 /**
  * Initialize leaflet map, called from HTML.
@@ -87,7 +97,7 @@ initMap = () => {
   }).addTo(newMap);
 
   updateRestaurants();
-}
+};
 /* window.initMap = () => {
   let loc = {
     lat: 40.722216,
@@ -107,12 +117,38 @@ initMap = () => {
 updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
+  const localStorageAvailable = storageAvailable("localStorage");
+  let cIndex = cSelect.selectedIndex;
+  let nIndex = nSelect.selectedIndex;
+  let cuisine = cSelect[cIndex].value;
+  let neighborhood = nSelect[nIndex].value;
 
-  const cIndex = cSelect.selectedIndex;
-  const nIndex = nSelect.selectedIndex;
+  if(localStorageAvailable) {
+    if(cIndex >= 0) {
+      localStorage.setItem("cuisIndex", cIndex);
+      localStorage.setItem("cuisine", cSelect[cIndex].value);
+    } else {
+      cIndex = localStorage.getItem("cuisIndex");
+      cuisine = localStorage.getItem("cuisine");
+      console.log(cSelect);
+    }
+    if(nIndex >= 0) {
+      localStorage.setItem("neighbIndex", nIndenx);
+      localStorage.setItem("neighborhood", nSelect[nIndex].value);
+    } else {
+      nIndex = localStorage.getItem("neighbIndex");
+      neighborhood = localStorage.getItem("neighborhood");
+      nSelect.value = neighborhood;
+    }
+  }
 
-  const cuisine = cSelect[cIndex].value;
-  const neighborhood = nSelect[nIndex].value;
+  if(!cuisine) {
+    cuisine = cSelect[cIndex].value;
+  }
+
+  if(!neighborhood) {
+    neighborhood = nSelect[nIndex].value;
+  }
 
   DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
     if (error) { // Got an error!
@@ -121,8 +157,8 @@ updateRestaurants = () => {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
     }
-  })
-}
+  });
+};
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
@@ -132,14 +168,13 @@ resetRestaurants = (restaurants) => {
   self.restaurants = [];
   const ul = document.getElementById('restaurants-list');
   ul.innerHTML = '';
-
   // Remove all map markers
   if (self.markers) {
     self.markers.forEach(marker => marker.remove());
   }
   self.markers = [];
   self.restaurants = restaurants;
-}
+};
 
 /**
  * Create all restaurants HTML and add them to the webpage.
@@ -150,15 +185,16 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     ul.append(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
-}
+};
 
 /**
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
-
+  li.setAttribute("aria-label", "restaurant detail");
   const image = document.createElement('img');
+  image.setAttribute("alt", "Restaurant photo");
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   li.append(image);
@@ -178,10 +214,10 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  li.append(more);
 
-  return li
-}
+  return li;
+};
 
 /**
  * Add markers for current restaurants to the map.
@@ -197,7 +233,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 
-}
+};
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
