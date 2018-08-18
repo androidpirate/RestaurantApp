@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added
   fetchNeighborhoods();
   fetchCuisines();
-  updaterestaurants();
+  updateRestaurants();
 });
 
 /**
@@ -37,7 +37,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
-    if(localStorage.getItem("neighboorhood") === neighboorhood) {
+    if(localStorage.getItem("neighborhood") === neighborhood) {
       option.setAttribute("selected", "selected");
     }
     option.innerHTML = neighborhood;
@@ -117,29 +117,25 @@ initMap = () => {
 updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
-  const localStorageAvailable = storageAvailable("localStorage");
   let cIndex = cSelect.selectedIndex;
   let nIndex = nSelect.selectedIndex;
   let cuisine = cSelect[cIndex].value;
   let neighborhood = nSelect[nIndex].value;
-
-  if(localStorageAvailable) {
-    if(cIndex >= 0) {
-      localStorage.setItem("cuisIndex", cIndex);
-      localStorage.setItem("cuisine", cSelect[cIndex].value);
-    } else {
-      cIndex = localStorage.getItem("cuisIndex");
-      cuisine = localStorage.getItem("cuisine");
-      console.log(cSelect);
-    }
-    if(nIndex >= 0) {
-      localStorage.setItem("neighbIndex", nIndenx);
-      localStorage.setItem("neighborhood", nSelect[nIndex].value);
-    } else {
-      nIndex = localStorage.getItem("neighbIndex");
-      neighborhood = localStorage.getItem("neighborhood");
-      nSelect.value = neighborhood;
-    }
+  if(cIndex >= 0) {
+    localStorage.setItem("cuisIndex", cIndex);
+    localStorage.setItem("cuisine", cSelect[cIndex].value);
+  } else {
+    cIndex = localStorage.getItem("cuisIndex");
+    cuisine = localStorage.getItem("cuisine");
+    console.log(cSelect);
+  }
+  if(nIndex >= 0) {
+    localStorage.setItem("neighbIndex", nIndex);
+    localStorage.setItem("neighborhood", nSelect[nIndex].value);
+  } else {
+    nIndex = localStorage.getItem("neighbIndex");
+    neighborhood = localStorage.getItem("neighborhood");
+    nSelect.value = neighborhood;
   }
 
   if(!cuisine) {
