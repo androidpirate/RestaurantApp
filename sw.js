@@ -38,10 +38,7 @@ self.addEventListener("fetch", event => {
   if(event.request.url.startsWith(self.location.origin)) {
     event.respondWith(
       caches.match(event.request).then(response => {
-        if(response) {
-          return response;
-        }
-        return fetch(event.request);
+        return response || fetch(event.request);
       })
     );
   }
