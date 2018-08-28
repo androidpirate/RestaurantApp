@@ -6,9 +6,6 @@ var newMap;
  * Initialize map as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchRestaurantFromURL(restaurant => {
-    fillBreadcrumb();
-  });
   initMap();
 });
 
@@ -108,22 +105,24 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
-fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
-  const hours = document.getElementById('restaurant-hours');
-  for (let key in operatingHours) {
-    const row = document.createElement('tr');
+ fillRestaurantHoursHTML = (
+   operatingHours = self.restaurant.operating_hours
+ ) => {
+   const hours = document.getElementById("restaurant-hours");
+   for (let key in operatingHours) {
+     const row = document.createElement("tr");
 
-    const day = document.createElement('td');
-    day.innerHTML = key;
-    row.appendChild(day);
+     const day = document.createElement("td");
+     day.innerHTML = key;
+     row.appendChild(day);
 
-    const time = document.createElement('td');
-    time.innerHTML = operatingHours[key];
-    row.appendChild(time);
+     const time = document.createElement("td");
+     time.innerHTML = operatingHours[key];
+     row.appendChild(time);
 
-    hours.appendChild(row);
-  }
-};
+     hours.appendChild(row);
+   }
+ };
 
 /**
  * Create all reviews HTML and add them to the webpage.
