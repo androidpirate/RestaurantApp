@@ -65,37 +65,44 @@ nav h1 a {
   letter-spacing: 10px;
   text-transform: uppercase;
 }
+#breadcrumb-container {
+	margin: 0;
+	padding: 0;
+	width: 50%;
+	text-align: left;
+	background-color: #eee;
+}
 #breadcrumb {
-    padding: 10px 40px 16px;
-    list-style: none;
-    background-color: #eee;
-    font-size: 17px;
-    margin: 0;
-    width: calc(50% - 80px);
+  padding: 10px 40px 16px;
+  list-style: none;
+  background-color: #eee;
+  font-size: 17px;
+  margin: 0;
+  width: calc(50% - 80px);
 }
 
 /* Display list items side by side */
 #breadcrumb li {
-    display: inline;
+  display: inline;
 }
 
 /* Add a slash symbol (/) before/behind each list item */
 #breadcrumb li+li:before {
-    padding: 8px;
-    color: black;
-    content: "/\00a0";
+  padding: 8px;
+  color: black;
+  content: "/\00a0";
 }
 
 /* Add a color to all links inside the list */
 #breadcrumb li a {
-    color: #0275d8;
-    text-decoration: none;
+  color: #0275d8;
+  text-decoration: none;
 }
 
 /* Add a color on mouse-over */
 #breadcrumb li a:hover {
-    color: #01447e;
-    text-decoration: underline;
+  color: #01447e;
+  text-decoration: underline;
 }
 /* ====================== Map ====================== */
 #map {
@@ -244,7 +251,7 @@ nav h1 a {
 #restaurant-container, #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
-  padding: 140px 40px 30px;
+  padding: 150px 40px 30px;
   width: 50%;
 }
 #reviews-container {
@@ -322,6 +329,14 @@ nav h1 a {
 	.inside header {
 		position: relative;
   }
+	#breadcrumb-container {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height: 50px;
+		text-align: left;
+		background-color: #eee;
+	}
 	#breadcrumb {
 		padding: 10px;
 		width: 100%;
@@ -391,6 +406,18 @@ nav h1 a {
 	}
 }
 @media screen and (min-width: 768px) and (max-width: 1279px) {
+	#breadcrumb-container {
+		margin: 0;
+		padding: 0;
+		width: 50%;
+		height: 50px;
+		text-align: left;
+		background-color: #eee;
+	}
+	#breadcrumb {
+		padding-left: 45px;
+		width: 50%;
+	}
   #reviews-list li {
 		width: 80%;
 		margin: 0;
@@ -412,6 +439,25 @@ nav h1 a {
 	}
 }
 @media screen and (min-width: 1280px) {
+	#breadcrumb-container {
+		margin: 0;
+		padding: 0;
+		width: 50%;
+		height: 60px;
+		text-align: left;
+		background-color: #eee;
+	}
+	#breadcrumb {
+		width: 50%;
+	}
+	.inside #map-container {
+		width: 50%;
+		height: 100%;
+		margin-left: 10px;
+  }
+  .inside #map {
+		position: relative;
+  }
 	.inside #footer {
 		width: 50%;
 		margin: 0;
