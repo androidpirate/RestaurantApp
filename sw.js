@@ -1,13 +1,12 @@
 /* jshint esversion: 6 */
 
-const staticCacheName = "static-restaurant-data";
+const CACHE_NAME = "cache-restaurant-data";
 let cacheURLs = [
-  "./",
-  "./sw_reg.js",
+  "/",
+  "sw_reg.js",
   "index.html",
   "restaurant.html",
   "css/styles.css",
-  "data/restaurants.json",
   "js/dbhelper.js",
   "js/main.js",
   "js/restaurant_info.js",
@@ -23,23 +22,23 @@ let cacheURLs = [
   "img/10.jpg"
 ];
 
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => Promise.all(cacheNames.map(cache => {
-      if(cache !== staticCacheName) {
-        console.log("Remove cache", cache);
-        return caches.delete(cache);
-      }
-    })))
-  );
+self.addEventListener('install', function(event) {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+        .then(function(cache) {
+            console.log('Opened cache');
+            return cache.addAll(cacheURLs);
+        })
+    );
 });
 
-self.addEventListener("fetch", event => {
-  if(event.request.url.startsWith(self.location.origin)) {
+self.addEventListener('fecth', function(event) {
     event.respondWith(
-      caches.match(event.request).then(response => {
-        return response || fetch(event.request);
-      })
-    );
-  }
+        caches.match(event.request)
+        .then(function(response) {
+            if(response) {
+                return response;
+            }
+            return fetch(event.request);
+        }));
 });
